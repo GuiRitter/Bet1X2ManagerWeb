@@ -13,6 +13,7 @@ const initialState =
 	data: null,
 	isLoading: false,
 	projectId: null,
+	projectName: null,
 	token: null
 };
 
@@ -21,21 +22,9 @@ const reducer = (currentState = initialState, action) => {
 
 	let nextState = Object.assign({}, currentState);
 
-	// if ((nextState.state === state.MENU) || (!nextState.token)) {
-	// 	nextState.data = null;
-	// }
-
-	// if (nextState.state == state.READ_ARTIST) {
-	// 	nextState.data = {
-	// 		...nextState.data,
-	// 		artist: {
-	// 			count: 0,
-	// 			list: [],
-	// 			pageNumber: 0,
-	// 			pageSize: 30
-	// 		}
-	// 	};
-	// }
+	if (!nextState.token) {
+		nextState.data = null;
+	}
 
 	switch (action.type) {
 
@@ -56,6 +45,22 @@ const reducer = (currentState = initialState, action) => {
 			return updateLocalStorage({
 				...nextState,
 				abortMethod: nextState.isLoading ? action.abortMethod : null
+			});
+
+		case type.GET_BET:
+			return updateLocalStorage({
+				...nextState,
+				data: action.data,
+				projectId: action.projectId,
+				projectName: action.projectName
+			});
+
+		case type.GET_PROJECT:
+			return updateLocalStorage({
+				...nextState,
+				data: action.data,
+				projectId: null,
+				projectName: null
 			});
 
 		case type.LOADING:

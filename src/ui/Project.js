@@ -1,25 +1,21 @@
 import React/*, { useEffect, useRef }*/ from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getProject, signOut } from '../flux/action/index';
+import { getBet, getProject, signOut } from '../flux/action/index';
 
 import { buildCell, buildRow, buildTable } from '../util/html';
 
+import { getLog } from '../util/log';
+
+const log = getLog('Project.');
+
 function Project(props) {
 
-	// const didMountRef = useRef(false);
 	const dispatch = useDispatch();
 
-	const projectList = useSelector(state => !!(((state || {}).reducer || {}).data)) || [];
+	const projectList = useSelector(state => (((state || {}).reducer || {}).data)) || [];
 
-	// useEffect(() => {
-	// 	if (didMountRef.current) {
-	// 		// componentDidUpdate(props, prevProps);
-	// 	} else {
-	// 		didMountRef.current = true;
-	// 		componentDidMount(props);
-	// 	}
-	// });
+	log('Project', { projectList });
 
 	return buildTable(
 		[
@@ -27,12 +23,16 @@ function Project(props) {
 			buildRow(
 				'header',
 				buildCell('name', 'Name'),
-				buildCell('button', <button
-					onClick={() => alert('TO DO')}
-					type='submit'
-				>Manage</button>)
+				buildCell('manage', '')
 			)
-		].concat(projectList).concat(
+		].concat(projectList.map((project, index) => buildRow(
+			`project_${index}`,
+			buildCell(`name_${index}`, project.name),
+			buildCell(`manage_${index}`, <button
+				onClick={() => dispatch(getBet(project.id, project.name))}
+				type='submit'
+			>Manage</button>)
+		))).concat(
 			[
 				buildRow(
 					'refresh',

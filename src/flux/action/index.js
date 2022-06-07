@@ -5,17 +5,28 @@ import { API_URL } from '../../constant/system';
 
 import { getUrlWithSearchParams } from '../../util/http';
 
+export const getBet = (projectId, projectName) => dispatch => {
+	dispatch(axios.get(
+		getUrlWithSearchParams(`${API_URL}/bet/list`, { projectId }),
+		null,
+		value => dispatch({
+			type: type.GET_BET,
+			data: value.data,
+			projectId,
+			projectName
+		}),
+		null
+	));
+};
+
 export const getProject = () => dispatch => {
 	dispatch(axios.get(
 		`${API_URL}/project/list`,
 		null,
-		value => {
-			debugger;
-			// dispatch({
-			// 	type: type.GET_DONE,
-			// 	data: value.data
-			// })
-		},
+		value => dispatch({
+			type: type.GET_PROJECT,
+			data: value.data
+		}),
 		null
 	));
 };
@@ -25,8 +36,9 @@ export const restoreFromLocalStorage = () => ({
 });
 
 export const signIn = (login, password) => dispatch => {
-	dispatch(axios.get(
-		getUrlWithSearchParams(`${API_URL}/user/sign_in`, { login, password }),
+	dispatch(axios.post(
+		`${API_URL}/user/sign_in`,
+		{ login, password },
 		null,
 		value => {
 			if (!value) {

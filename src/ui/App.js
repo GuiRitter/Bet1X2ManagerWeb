@@ -7,6 +7,7 @@ import { getLog } from '../util/log';
 
 import './App.css';
 
+import BetList from './BetList';
 import Loading from './Loading';
 import Project from './Project';
 import SignIn from './SignIn';
@@ -45,9 +46,9 @@ function App(props) {
 	if (!isAuthenticated) {
 		return <SignIn />;
 	}
-
+	
 	if (projectId) {
-		return null;
+		return <BetList />;
 	}
 
 	return <Project />;

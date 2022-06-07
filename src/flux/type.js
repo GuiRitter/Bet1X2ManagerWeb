@@ -4,6 +4,8 @@ export const AUTHENTICATION = 'AUTHENTICATION';
 
 export const ENABLE_ABORT_REQUEST = 'ENABLE_ABORT_REQUEST';
 
+export const GET_BET = 'GET_BET';
+
 export const GET_PROJECT = 'GET_PROJECT';
 
 export const LOADING = 'LOADING';
