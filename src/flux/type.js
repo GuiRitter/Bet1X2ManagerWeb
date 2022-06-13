@@ -11,3 +11,7 @@ export const GET_PROJECT = 'GET_PROJECT';
 export const LOADING = 'LOADING';
 
 export const RESTORE_FROM_LOCAL_STORAGE = 'RESTORE_FROM_LOCAL_STORAGE';
+
+export const SET_BET = 'SET_BET';
+
+export const SET_ODD = 'SET_ODD';

@@ -35,6 +35,16 @@ export const restoreFromLocalStorage = () => ({
 	type: type.RESTORE_FROM_LOCAL_STORAGE
 });
 
+export const setBet = bet => ({
+	type: type.SET_BET,
+	bet
+});
+
+export const setOdd = odd => ({
+	type: type.SET_ODD,
+	odd
+});
+
 export const signIn = (login, password) => dispatch => {
 	dispatch(axios.post(
 		`${API_URL}/user/sign_in`,

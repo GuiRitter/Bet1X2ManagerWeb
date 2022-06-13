@@ -10,10 +10,12 @@ const log = getLog('flux.reducer.');
 const initialState =
 {
 	abortMethod: null,
+	bet: 0,
 	data: null,
 	isLoading: false,
 	projectId: null,
 	projectName: null,
+	odd: 0,
 	token: null
 };
 
@@ -50,17 +52,21 @@ const reducer = (currentState = initialState, action) => {
 		case type.GET_BET:
 			return updateLocalStorage({
 				...nextState,
+				bet: 0,
 				data: action.data,
 				projectId: action.projectId,
-				projectName: action.projectName
+				projectName: action.projectName,
+				odd: 0
 			});
 
 		case type.GET_PROJECT:
 			return updateLocalStorage({
 				...nextState,
+				bet: 0,
 				data: action.data,
 				projectId: null,
-				projectName: null
+				projectName: null,
+				odd: 0
 			});
 
 		case type.LOADING:
@@ -72,6 +78,18 @@ const reducer = (currentState = initialState, action) => {
 
 		case type.RESTORE_FROM_LOCAL_STORAGE:
 			return JSON.parse(localStorage.getItem(LOCAL_STORAGE_NAME)) || initialState;
+
+		case type.SET_BET:
+			return updateLocalStorage({
+				...nextState,
+				bet: action.bet
+			});
+
+		case type.SET_ODD:
+			return updateLocalStorage({
+				...nextState,
+				odd: action.odd
+			});
 
 		default: return nextState;
 	}

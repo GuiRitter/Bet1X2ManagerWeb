@@ -8,3 +8,11 @@ input, button {
   border-color: #898989;
   color: #ffffff
 }
+
+.text_align_center {
+  text-align: center;
+}
+
+.text_align_right {
+  text-align: right;
+}
