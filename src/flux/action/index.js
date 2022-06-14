@@ -36,13 +36,18 @@ export const restoreFromLocalStorage = () => ({
 });
 
 export const setBet = bet => ({
-	type: type.SET_BET,
+	type: type.SET_ACTION_DATA,
 	bet
 });
 
 export const setOdd = odd => ({
-	type: type.SET_ODD,
+	type: type.SET_ACTION_DATA,
 	odd
+});
+
+export const setResult = result => ({
+	type: type.SET_ACTION_DATA,
+	result
 });
 
 export const signIn = (login, password) => dispatch => {

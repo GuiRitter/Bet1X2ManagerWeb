@@ -8,6 +8,7 @@ import { buildCell, buildRow, buildTable } from '../util/html';
 
 import BetClosed from './BetClosed';
 import BetNew from './BetNew';
+import BetOpen from './BetOpen';
 
 import { getLog } from '../util/log';
 
@@ -25,9 +26,11 @@ function BetList(props) {
 
 	log('BetList', { projectId, projectName, betList, lastBet, showNewBet });
 
-	const betNewList = [];
+	const betActionList = [];
 	if (showNewBet) {
-		betNewList.push(<BetNew key={-1} index={-1} lastBet={lastBet} />);
+		betActionList.push(<BetNew key={-1} index={-1} lastBet={lastBet} />);
+	} else {
+		betActionList.push(<BetOpen key={-1} index={-1} lastBet={lastBet} />);
 	}
 
 	return buildTable(
@@ -49,7 +52,7 @@ function BetList(props) {
 				buildCell('prize_total', 'Prize total', { className: 'text_align_right' }),
 				buildCell('balance_total', 'Balance total', { className: 'text_align_right' })
 			)
-		].concat(betNewList).concat(betList.map((bet, index) => <BetClosed
+		].concat(betActionList).concat(betList.filter(bet => bet.actual_result).map((bet, index) => <BetClosed
 			key={index} bet={bet}
 		/>)).concat(
 			[

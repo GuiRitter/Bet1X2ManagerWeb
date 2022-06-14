@@ -7,6 +7,8 @@ import { filledOrZero } from '../util/system';
 
 import { setBet, setOdd } from '../flux/action/index';
 
+import ResultSelect from './ResultSelect';
+
 import { getLog } from '../util/log';
 
 const log = getLog('BetNew.');
@@ -57,29 +59,28 @@ function BetNew(props) {
 		}
 	});
 
-	return <>{
-		buildRow(
-			`bet_row_${props.index}`,
-			buildCell(`date_time_${props.index}`, <input ref={ref => { if (ref) { dateTimeField = ref; } }} />),
-			buildCell(`home_${props.index}`, <input ref={ref => { if (ref) { homeField = ref; } }} />),
-			buildCell(`away_${props.index}`, <input ref={ref => { if (ref) { awayField = ref; } }} />),
-			buildCell(`expected_result_${props.index}`, <select ref={ref => { if (ref) { expectedResultField = ref; } }}><option>1</option><option>X</option><option>2</option></select>, { className: 'text_align_center' }),
-			buildCell(`odd_${props.index}`, <input className='text_align_right' onInput={() => dispatch(setOdd(oddField.value))} ref={ref => { if (ref) { oddField = ref; } }} />),
-			buildCell(`bet_${props.index}`, <input className='text_align_right' onInput={() => dispatch(setBet(betField.value))} ref={ref => { if (ref) { betField = ref; } }} />),
-			buildCell(`bet_sum_${props.index}`, betSum.toFixed(2), { className: 'text_align_right', ref: ref => { if (ref) betSumField = ref } }),
-			buildCell(`actual_result_${props.index}`, '', { className: 'text_align_center' }),
-			buildCell(`prize_${props.index}`, expectedPrize.toFixed(2), { className: 'text_align_center' }),
-			buildCell(`balance_${props.index}`, expectedBalance.toFixed(2), { className: 'text_align_center' }),
-			buildCell(`bet_total_${props.index}`, betTotal.toFixed(2), { className: 'text_align_right' }),
-			buildCell(`prize_total_${props.index}`, prizeTotal.toFixed(2), { className: 'text_align_right' }),
-			buildCell(`balance_total_${props.index}`, balanceTotal.toFixed(2), { className: 'text_align_right' })
-		)}{buildRow(
-			`bet_action_header_row_${props.index}`,
-			buildCell('bet_total', <button
-				onClick={() => alert('TO DO')}
-				type='submit'
-			>Place bet</button>, { className: 'text_align_right', colSpan: 13 })
-		)}</>
+	return <>{buildRow(
+		`bet_new_data_row`,
+		buildCell(`date_time`, <input ref={ref => { if (ref) { dateTimeField = ref; } }} />),
+		buildCell(`home`, <input ref={ref => { if (ref) { homeField = ref; } }} />),
+		buildCell(`away`, <input ref={ref => { if (ref) { awayField = ref; } }} />),
+		buildCell(`expected_result`, <ResultSelect setRef={(ref) => expectedResultField = ref} />, { className: 'text_align_center' }),
+		buildCell(`odd`, <input className='text_align_right' onInput={() => dispatch(setOdd(oddField.value))} ref={ref => { if (ref) { oddField = ref; } }} />),
+		buildCell(`bet`, <input className='text_align_right' onInput={() => dispatch(setBet(betField.value))} ref={ref => { if (ref) { betField = ref; } }} />),
+		buildCell(`bet_sum`, betSum.toFixed(2), { className: 'text_align_right', ref: ref => { if (ref) betSumField = ref } }),
+		buildCell(`actual_result`, '', { className: 'text_align_center' }),
+		buildCell(`prize`, expectedPrize.toFixed(2), { className: 'text_align_right' }),
+		buildCell(`balance`, expectedBalance.toFixed(2), { className: 'text_align_right' }),
+		buildCell(`bet_total`, betTotal.toFixed(2), { className: 'text_align_right' }),
+		buildCell(`prize_total`, prizeTotal.toFixed(2), { className: 'text_align_right' }),
+		buildCell(`balance_total`, balanceTotal.toFixed(2), { className: 'text_align_right' })
+	)}{buildRow(
+		`bet_new_action_row`,
+		buildCell('bet_action', <button
+			onClick={() => alert('TO DO')}
+			type='submit'
+		>Place bet</button>, { className: 'text_align_right', colSpan: 13 })
+	)}</>;
 }
 
 export default BetNew;

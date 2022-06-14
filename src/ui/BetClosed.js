@@ -10,20 +10,20 @@ function BetClosed(props) {
 
 	return buildRow(
 		`bet_row_${props.index}`,
-		buildCell(`date_time_${props.index}`, props.bet.date_time),
-		buildCell(`home_${props.index}`, props.bet.home),
-		buildCell(`away_${props.index}`, props.bet.away),
-		buildCell(`expected_result_${props.index}`, props.bet.expected_result, { className: 'text_align_center' }),
-		buildCell(`odd_${props.index}`, props.bet.odd, { className: 'text_align_right' }),
-		buildCell(`bet_${props.index}`, props.bet.bet, { className: 'text_align_right' }),
-		buildCell(`bet_sum_${props.index}`, props.bet.bet_sum, { className: 'text_align_right' }),
-		buildCell(`actual_result_${props.index}`, props.bet.actual_result, { className: 'text_align_center' }),
-		buildCell(`prize_${props.index}`, prize.toFixed(2), { className: 'text_align_center' }),
-		buildCell(`balance_${props.index}`, balance.toFixed(2), { className: 'text_align_center' }),
-		buildCell(`bet_total_${props.index}`, props.bet.bet_total, { className: 'text_align_right' }),
-		buildCell(`prize_total_${props.index}`, props.bet.prize_total, { className: 'text_align_right' }),
-		buildCell(`balance_total_${props.index}`, balanceTotal.toFixed(2), { className: 'text_align_right' })
-	)
+		buildCell(`date_time`, props.bet.date_time),
+		buildCell(`home`, props.bet.home),
+		buildCell(`away`, props.bet.away),
+		buildCell(`expected_result`, props.bet.expected_result, { className: 'text_align_center' }),
+		buildCell(`odd`, props.bet.odd, { className: 'text_align_right' }),
+		buildCell(`bet`, props.bet.bet, { className: 'text_align_right' }),
+		buildCell(`bet_sum`, props.bet.bet_sum, { className: 'text_align_right' }),
+		buildCell(`actual_result`, props.bet.actual_result, { className: 'text_align_center' }),
+		buildCell(`prize`, prize.toFixed(2), { className: 'text_align_right' }),
+		buildCell(`balance`, balance.toFixed(2), { className: 'text_align_right' }),
+		buildCell(`bet_total`, props.bet.bet_total, { className: 'text_align_right' }),
+		buildCell(`prize_total`, props.bet.prize_total, { className: 'text_align_right' }),
+		buildCell(`balance_total`, balanceTotal.toFixed(2), { className: 'text_align_right' })
+	);
 }
 
 export default BetClosed;

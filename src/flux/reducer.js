@@ -16,6 +16,7 @@ const initialState =
 	projectId: null,
 	projectName: null,
 	odd: 0,
+	result: null,
 	token: null
 };
 
@@ -56,7 +57,8 @@ const reducer = (currentState = initialState, action) => {
 				data: action.data,
 				projectId: action.projectId,
 				projectName: action.projectName,
-				odd: 0
+				odd: 0,
+				result: null
 			});
 
 		case type.GET_PROJECT:
@@ -66,7 +68,8 @@ const reducer = (currentState = initialState, action) => {
 				data: action.data,
 				projectId: null,
 				projectName: null,
-				odd: 0
+				odd: 0,
+				result: null
 			});
 
 		case type.LOADING:
@@ -79,16 +82,11 @@ const reducer = (currentState = initialState, action) => {
 		case type.RESTORE_FROM_LOCAL_STORAGE:
 			return JSON.parse(localStorage.getItem(LOCAL_STORAGE_NAME)) || initialState;
 
-		case type.SET_BET:
+		case type.SET_ACTION_DATA:
+			delete action.type;
 			return updateLocalStorage({
 				...nextState,
-				bet: action.bet
-			});
-
-		case type.SET_ODD:
-			return updateLocalStorage({
-				...nextState,
-				odd: action.odd
+				...action
 			});
 
 		default: return nextState;
