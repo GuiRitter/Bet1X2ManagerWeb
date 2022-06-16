@@ -31,7 +31,7 @@ export const getProject = () => dispatch => {
 	));
 };
 
-export const postBetStart = () => (dispatch, getState) => {
+export const placeBet = () => (dispatch, getState) => {
 	dispatch(axios.post(
 		`${API_URL}/bet/place`,
 		{

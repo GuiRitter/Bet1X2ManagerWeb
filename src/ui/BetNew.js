@@ -5,7 +5,7 @@ import { buildCell, buildRow } from '../util/html';
 import { decimal } from '../util/math';
 import { filledOrZero } from '../util/system';
 
-import { postBetStart, setDateTime, setHome, setAway, setExpectedResult, setBet, setOdd } from '../flux/action/index';
+import { placeBet, setDateTime, setHome, setAway, setExpectedResult, setBet, setOdd } from '../flux/action/index';
 
 import ResultSelect from './ResultSelect';
 
@@ -93,7 +93,7 @@ function BetNew(props) {
 	)}{buildRow(
 		`bet_new_action_row`,
 		buildCell('bet_action', <button
-			onClick={() => dispatch(postBetStart())}
+			onClick={() => dispatch(placeBet())}
 			type='submit'
 		>Place bet</button>, { className: 'text_align_right', colSpan: 13 })
 	)}</>;
