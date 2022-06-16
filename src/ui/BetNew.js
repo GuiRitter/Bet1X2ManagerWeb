@@ -5,7 +5,7 @@ import { buildCell, buildRow } from '../util/html';
 import { decimal } from '../util/math';
 import { filledOrZero } from '../util/system';
 
-import { setBet, setOdd } from '../flux/action/index';
+import { postBetStart, setDateTime, setHome, setAway, setExpectedResult, setBet, setOdd } from '../flux/action/index';
 
 import ResultSelect from './ResultSelect';
 
@@ -22,7 +22,19 @@ let expectedResultField = null;
 let expectedPrizeField = null;
 let betSumField = null;
 
-function componentDidMount(props, dispatch, bet, odd) {
+function componentDidMount(props, dispatch, dateTime, home, away, expectedResult, bet, odd) {
+	if (dateTimeField && (dateTimeField.value !== dateTime)) {
+		dateTimeField.value = dateTime
+	}
+	if (homeField && (homeField.value !== home)) {
+		homeField.value = home
+	}
+	if (awayField && (awayField.value !== away)) {
+		awayField.value = away
+	}
+	if (expectedResultField && expectedResult && (expectedResultField.value !== expectedResult)) {
+		expectedResultField.value = expectedResult
+	}
 	if (betField && filledOrZero(bet) && (!(decimal(betField.value || 0).equals(bet)))) {
 		betField.value = bet
 	}
@@ -36,6 +48,10 @@ function BetNew(props) {
 	const didMountRef = useRef(false);
 	const dispatch = useDispatch();
 
+	const dateTime = useSelector(state => ((state || {}).reducer || {}).dateTime);
+	const home = useSelector(state => ((state || {}).reducer || {}).home);
+	const away = useSelector(state => ((state || {}).reducer || {}).away);
+	const expectedResult = useSelector(state => ((state || {}).reducer || {}).expectedResult);
 	const bet = useSelector(state => ((state || {}).reducer || {}).bet) || 0;
 	const odd = useSelector(state => ((state || {}).reducer || {}).odd) || 0;
 
@@ -55,16 +71,16 @@ function BetNew(props) {
 			// componentDidUpdate(props, prevProps);
 		} else {
 			didMountRef.current = true;
-			componentDidMount(props, dispatch, bet, odd);
+			componentDidMount(props, dispatch, dateTime, home, away, expectedResult, bet, odd);
 		}
 	});
 
 	return <>{buildRow(
 		`bet_new_data_row`,
-		buildCell(`date_time`, <input ref={ref => { if (ref) { dateTimeField = ref; } }} />),
-		buildCell(`home`, <input ref={ref => { if (ref) { homeField = ref; } }} />),
-		buildCell(`away`, <input ref={ref => { if (ref) { awayField = ref; } }} />),
-		buildCell(`expected_result`, <ResultSelect setRef={(ref) => expectedResultField = ref} />, { className: 'text_align_center' }),
+		buildCell(`date_time`, <input onInput={() => dispatch(setDateTime(dateTimeField.value))} ref={ref => { if (ref) { dateTimeField = ref; } }} />),
+		buildCell(`home`, <input onInput={() => dispatch(setHome(homeField.value))} ref={ref => { if (ref) { homeField = ref; } }} />),
+		buildCell(`away`, <input onInput={() => dispatch(setAway(awayField.value))} ref={ref => { if (ref) { awayField = ref; } }} />),
+		buildCell(`expected_result`, <ResultSelect onInput={() => dispatch(setExpectedResult(expectedResultField.value))} setRef={(ref) => expectedResultField = ref} />, { className: 'text_align_center' }),
 		buildCell(`odd`, <input className='text_align_right' onInput={() => dispatch(setOdd(oddField.value))} ref={ref => { if (ref) { oddField = ref; } }} />),
 		buildCell(`bet`, <input className='text_align_right' onInput={() => dispatch(setBet(betField.value))} ref={ref => { if (ref) { betField = ref; } }} />),
 		buildCell(`bet_sum`, betSum.toFixed(2), { className: 'text_align_right', ref: ref => { if (ref) betSumField = ref } }),
@@ -77,7 +93,7 @@ function BetNew(props) {
 	)}{buildRow(
 		`bet_new_action_row`,
 		buildCell('bet_action', <button
-			onClick={() => alert('TO DO')}
+			onClick={() => dispatch(postBetStart())}
 			type='submit'
 		>Place bet</button>, { className: 'text_align_right', colSpan: 13 })
 	)}</>;

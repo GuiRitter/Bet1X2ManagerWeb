@@ -17,7 +17,12 @@ const initialState =
 	projectName: null,
 	odd: 0,
 	result: null,
-	token: null
+	token: null,
+
+	away: null,
+	dateTime: null,
+	expectedResult: null,
+	home: null
 };
 
 const reducer = (currentState = initialState, action) => {
@@ -53,22 +58,30 @@ const reducer = (currentState = initialState, action) => {
 		case type.GET_BET:
 			return updateLocalStorage({
 				...nextState,
+				away: null,
 				bet: 0,
 				data: action.data,
+				dateTime: null,
+				expectedResult: null,
+				home: null,
+				odd: 0,
 				projectId: action.projectId,
 				projectName: action.projectName,
-				odd: 0,
 				result: null
 			});
 
 		case type.GET_PROJECT:
 			return updateLocalStorage({
 				...nextState,
+				away: null,
 				bet: 0,
 				data: action.data,
+				dateTime: null,
+				expectedResult: null,
+				home: null,
+				odd: 0,
 				projectId: null,
 				projectName: null,
-				odd: 0,
 				result: null
 			});
 

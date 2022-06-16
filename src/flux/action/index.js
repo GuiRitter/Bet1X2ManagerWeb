@@ -31,24 +31,65 @@ export const getProject = () => dispatch => {
 	));
 };
 
+export const postBetStart = () => (dispatch, getState) => {
+	dispatch(axios.post(
+		`${API_URL}/bet/start`,
+		{
+			projectId: getState().reducer.projectId,
+			dateTime: getState().reducer.dateTime,
+			home: getState().reducer.home,
+			away: getState().reducer.away,
+			expectedResult: getState().reducer.expectedResult,
+			odd: getState().reducer.odd,
+			bet: getState().reducer.bet
+		},
+		null,
+		value => dispatch(getBet(getState().reducer.projectId, getState().reducer.projectName)),
+		null
+	));
+};
+
 export const restoreFromLocalStorage = () => ({
 	type: type.RESTORE_FROM_LOCAL_STORAGE
 });
 
-export const setBet = bet => ({
-	type: type.SET_ACTION_DATA,
-	bet
-});
+export const setActionData = (dataName, dataValue) => (dispatch, getState) => {
+	if (dataValue === getState().reducer[dataName]) {
+		return;
+	}
+	dispatch({
+		type: type.SET_ACTION_DATA,
+		[dataName]: dataValue
+	});
+};
 
-export const setOdd = odd => ({
-	type: type.SET_ACTION_DATA,
-	odd
-});
+export const setAway = away => (dispatch, getState) => {
+	dispatch(setActionData('away', away));
+};
 
-export const setResult = result => ({
-	type: type.SET_ACTION_DATA,
-	result
-});
+export const setBet = bet => (dispatch, getState) => {
+	dispatch(setActionData('bet', bet));
+};
+
+export const setDateTime = dateTime => (dispatch, getState) => {
+	dispatch(setActionData('dateTime', dateTime));
+};
+
+export const setExpectedResult = expectedResult => (dispatch, getState) => {
+	dispatch(setActionData('expectedResult', expectedResult));
+};
+
+export const setHome = home => (dispatch, getState) => {
+	dispatch(setActionData('home', home));
+};
+
+export const setOdd = odd => (dispatch, getState) => {
+	dispatch(setActionData('odd', odd));
+};
+
+export const setResult = result => (dispatch, getState) => {
+	dispatch(setActionData('result', result));
+};
 
 export const signIn = (login, password) => dispatch => {
 	dispatch(axios.post(
