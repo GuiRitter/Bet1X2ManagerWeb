@@ -33,7 +33,7 @@ export const getProject = () => dispatch => {
 
 export const postBetStart = () => (dispatch, getState) => {
 	dispatch(axios.post(
-		`${API_URL}/bet/start`,
+		`${API_URL}/bet/place`,
 		{
 			projectId: getState().reducer.projectId,
 			dateTime: getState().reducer.dateTime,
