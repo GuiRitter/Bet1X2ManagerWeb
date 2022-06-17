@@ -16,7 +16,7 @@ const initialState =
 	projectId: null,
 	projectName: null,
 	odd: 0,
-	result: null,
+	actualResult: null,
 	token: null,
 
 	away: null,
@@ -67,7 +67,7 @@ const reducer = (currentState = initialState, action) => {
 				odd: 0,
 				projectId: action.projectId,
 				projectName: action.projectName,
-				result: null
+				actualResult: null
 			});
 
 		case type.GET_PROJECT:
@@ -82,7 +82,7 @@ const reducer = (currentState = initialState, action) => {
 				odd: 0,
 				projectId: null,
 				projectName: null,
-				result: null
+				actualResult: null
 			});
 
 		case type.LOADING:

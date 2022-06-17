@@ -5,6 +5,19 @@ import { API_URL } from '../../constant/system';
 
 import { getUrlWithSearchParams } from '../../util/http';
 
+export const closeBet = () => (dispatch, getState) => {
+	dispatch(axios.post(
+		`${API_URL}/bet/close`,
+		{
+			projectId: getState().reducer.projectId,
+			actualResult: getState().reducer.actualResult
+		},
+		null,
+		value => dispatch(getBet(getState().reducer.projectId, getState().reducer.projectName)),
+		null
+	));
+};
+
 export const getBet = (projectId, projectName) => dispatch => {
 	dispatch(axios.get(
 		getUrlWithSearchParams(`${API_URL}/bet/list`, { projectId }),
@@ -87,8 +100,8 @@ export const setOdd = odd => (dispatch, getState) => {
 	dispatch(setActionData('odd', odd));
 };
 
-export const setResult = result => (dispatch, getState) => {
-	dispatch(setActionData('result', result));
+export const setResult = actualResult => (dispatch, getState) => {
+	dispatch(setActionData('actualResult', actualResult));
 };
 
 export const signIn = (login, password) => dispatch => {

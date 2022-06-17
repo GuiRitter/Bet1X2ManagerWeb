@@ -35,10 +35,10 @@ function componentDidMount(props, dispatch, dateTime, home, away, expectedResult
 	if (expectedResultField && expectedResult && (expectedResultField.value !== expectedResult)) {
 		expectedResultField.value = expectedResult
 	}
-	if (betField && filledOrZero(bet) && (!(decimal(betField.value || 0).equals(bet)))) {
+	if (betField && filledOrZero(bet) && (!(decimal(betField.value || 0).equals(decimal(bet))))) {
 		betField.value = bet
 	}
-	if (oddField && filledOrZero(odd) && (!(decimal(oddField.value || 0).equals(odd)))) {
+	if (oddField && filledOrZero(odd) && (!(decimal(oddField.value || 0).equals(decimal(odd))))) {
 		oddField.value = odd
 	}
 }
@@ -57,12 +57,12 @@ function BetNew(props) {
 
 	const isClosed = props.lastBet.expected_result === props.lastBet.actual_result;
 	const lastBetSum = isClosed ? 0 : ((props || {}).lastBet || {}).bet_sum || 0;
-	const betSum = decimal(bet).plus(lastBetSum);
-	const expectedPrize = decimal(odd).times(bet);
-	const expectedBalance = expectedPrize.minus(betSum);
-	const betTotal = decimal(props.lastBet.bet_total || 0).plus(bet);
-	const prizeTotal = decimal(props.lastBet.prize_total || 0).plus(expectedPrize);
-	const balanceTotal = prizeTotal.minus(betTotal);
+	const betSum = decimal(bet).plus(decimal(lastBetSum));
+	const expectedPrize = decimal(odd).times(decimal(bet));
+	const expectedBalance = expectedPrize.minus(decimal(betSum));
+	const betTotal = decimal(props.lastBet.bet_total || 0).plus(decimal(bet));
+	const prizeTotal = decimal(props.lastBet.prize_total || 0).plus(decimal(expectedPrize));
+	const balanceTotal = prizeTotal.minus(decimal(betTotal));
 
 	log('BetNew', { props, bet, odd });
 
@@ -81,8 +81,8 @@ function BetNew(props) {
 		buildCell(`home`, <input onInput={() => dispatch(setHome(homeField.value))} ref={ref => { if (ref) { homeField = ref; } }} />),
 		buildCell(`away`, <input onInput={() => dispatch(setAway(awayField.value))} ref={ref => { if (ref) { awayField = ref; } }} />),
 		buildCell(`expected_result`, <ResultSelect onInput={() => dispatch(setExpectedResult(expectedResultField.value))} setRef={(ref) => expectedResultField = ref} />, { className: 'text_align_center' }),
-		buildCell(`odd`, <input className='text_align_right' onInput={() => dispatch(setOdd(oddField.value))} ref={ref => { if (ref) { oddField = ref; } }} />),
-		buildCell(`bet`, <input className='text_align_right' onInput={() => dispatch(setBet(betField.value))} ref={ref => { if (ref) { betField = ref; } }} />),
+		buildCell(`odd`, <input className='text_align_right input_number' onInput={() => dispatch(setOdd(oddField.value))} ref={ref => { if (ref) { oddField = ref; } }} />),
+		buildCell(`bet`, <input className='text_align_right input_number' onInput={() => dispatch(setBet(betField.value))} ref={ref => { if (ref) { betField = ref; } }} />),
 		buildCell(`bet_sum`, betSum.toFixed(2), { className: 'text_align_right', ref: ref => { if (ref) betSumField = ref } }),
 		buildCell(`actual_result`, '', { className: 'text_align_center' }),
 		buildCell(`prize`, expectedPrize.toFixed(2), { className: 'text_align_right' }),

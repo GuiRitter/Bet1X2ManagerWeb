@@ -16,3 +16,16 @@ input, button {
 .text_align_right {
   text-align: right;
 }
+
+.color_gain,
+option.color_gain {
+  color: #00ae00;
+}
+
+.color_loss {
+  color: #ff5e5e;
+}
+
+.input_number {
+  width: 4em;
+}

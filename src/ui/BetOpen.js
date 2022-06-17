@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { buildCell, buildRow } from '../util/html';
 
-import { setResult } from '../flux/action/index';
+import { closeBet, setResult } from '../flux/action/index';
 
 import { decimal } from '../util/math';
 
@@ -15,24 +15,24 @@ const log = getLog('BetOpen.');
 
 let actualResultField = null;
 
-function componentDidMount(props, dispatch, result) {
-	if (actualResultField && result && (actualResultField.value !== result)) {
-		actualResultField.value = result
+function componentDidMount(props, dispatch, actualResult) {
+	if (actualResultField && actualResult && (actualResultField.value !== actualResult)) {
+		actualResultField.value = actualResult
 	}
 }
 
 function BetOpen(props) {
 
-	const result = useSelector(state => ((state || {}).reducer || {}).result);
+	const actualResult = useSelector(state => ((state || {}).reducer || {}).actualResult);
 
-	const willClose = props.lastBet.expected_result === result;
-	const expectedPrize = decimal(props.lastBet.odd).times(props.lastBet.bet);
+	const willClose = props.lastBet.expected_result === actualResult;
+	const expectedPrize = decimal(props.lastBet.odd).times(decimal(props.lastBet.bet));
 	const prize = willClose ? expectedPrize : 0;
-	const prizeTotal = decimal(props.lastBet.prize_total).plus(prize);
-	const balanceTotal = prizeTotal.minus(props.lastBet.bet_total);
-	const balance = decimal(prize).minus(props.lastBet.bet_sum);
+	const prizeTotal = decimal(props.lastBet.prize_total).plus(decimal(prize));
+	const balanceTotal = prizeTotal.minus(decimal(props.lastBet.bet_total));
+	const balance = decimal(prize).minus(decimal(props.lastBet.bet_sum));
 
-	log('BetOpen', { result, willClose, expectedPrize, prize, prizeTotal, balanceTotal, balance });
+	log('BetOpen', { actualResult, willClose, expectedPrize, prize, prizeTotal, balanceTotal, balance });
 
 	const didMountRef = useRef(false);
 	const dispatch = useDispatch();
@@ -42,7 +42,7 @@ function BetOpen(props) {
 			// componentDidUpdate(props, prevProps);
 		} else {
 			didMountRef.current = true;
-			componentDidMount(props, dispatch, result);
+			componentDidMount(props, dispatch, actualResult);
 		}
 	});
 
@@ -55,7 +55,7 @@ function BetOpen(props) {
 		buildCell(`odd`, props.lastBet.odd, { className: 'text_align_right' }),
 		buildCell(`bet`, props.lastBet.bet, { className: 'text_align_right' }),
 		buildCell(`bet_sum`, props.lastBet.bet_sum, { className: 'text_align_right' }),
-		buildCell(`actual_result`, <ResultSelect hasEmptyOption onInput={() => dispatch(setResult(actualResultField.value))} setRef={(ref) => actualResultField = ref} />, { className: 'text_align_center' }),
+		buildCell(`actual_result`, <ResultSelect className={`${willClose ? 'color_gain' : 'color_loss'}`} hasEmptyOption onInput={() => dispatch(setResult(actualResultField.value))} setRef={(ref) => actualResultField = ref} />, { className: 'text_align_center' }),
 		buildCell(`prize`, expectedPrize.toFixed(2), { className: 'text_align_right' }),
 		buildCell(`balance`, balance.toFixed(2), { className: 'text_align_right' }),
 		buildCell(`bet_total`, props.lastBet.bet_total, { className: 'text_align_right' }),
@@ -64,7 +64,7 @@ function BetOpen(props) {
 	)}{buildRow(
 		`bet_open_action_row`,
 		buildCell('bet_action', <button
-			onClick={() => alert('TO DO')}
+			onClick={() => dispatch(closeBet())}
 			type='submit'
 		>Set result</button>, { className: 'text_align_right', colSpan: 13 })
 	)}</>;
