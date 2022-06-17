@@ -19,8 +19,6 @@ let awayField = null;
 let oddField = null;
 let betField = null;
 let expectedResultField = null;
-let expectedPrizeField = null;
-let betSumField = null;
 
 function componentDidMount(props, dispatch, dateTime, home, away, expectedResult, bet, odd) {
 	if (dateTimeField && (dateTimeField.value !== dateTime)) {
@@ -83,7 +81,7 @@ function BetNew(props) {
 		buildCell(`expected_result`, <ResultSelect onInput={() => dispatch(setExpectedResult(expectedResultField.value))} setRef={(ref) => expectedResultField = ref} />, { className: 'text_align_center' }),
 		buildCell(`odd`, <input className='text_align_right input_number' onInput={() => dispatch(setOdd(oddField.value))} ref={ref => { if (ref) { oddField = ref; } }} />),
 		buildCell(`bet`, <input className='text_align_right input_number' onInput={() => dispatch(setBet(betField.value))} ref={ref => { if (ref) { betField = ref; } }} />),
-		buildCell(`bet_sum`, betSum.toFixed(2), { className: 'text_align_right', ref: ref => { if (ref) betSumField = ref } }),
+		buildCell(`bet_sum`, betSum.toFixed(2), { className: 'text_align_right' }),
 		buildCell(`actual_result`, '', { className: 'text_align_center' }),
 		buildCell(`prize`, expectedPrize.toFixed(2), { className: 'text_align_right' }),
 		buildCell(`balance`, expectedBalance.toFixed(2), { className: 'text_align_right' }),
