@@ -31,8 +31,25 @@ function BetOpen(props) {
 	const prizeTotal = decimal(props.lastBet.prize_total).plus(decimal(prize));
 	const balanceTotal = prizeTotal.minus(decimal(props.lastBet.bet_total));
 	const balance = decimal(prize).minus(decimal(props.lastBet.bet_sum));
+	const isRecovery = props.lastExpectedResult && props.lastActualResult && (props.lastExpectedResult !== props.lastActualResult);
 
-	log('BetOpen', { actualResult, willClose, expectedPrize, prize, prizeTotal, balanceTotal, balance });
+	const color =
+		(!willClose) ? 'color_loss' :
+		isRecovery ? 'color_recovery' :
+		'color_gain';
+
+	log('BetOpen', {
+		actualResult,
+		willClose,
+		expectedPrize,
+		prize,
+		prizeTotal,
+		balanceTotal,
+		balance,
+		lastExpectedResult: props.lastExpectedResult,
+		lastActualResult: props.lastActualResult,
+		color
+	});
 
 	const didMountRef = useRef(false);
 	const dispatch = useDispatch();
@@ -55,7 +72,20 @@ function BetOpen(props) {
 		buildCell(`odd`, props.lastBet.odd, { className: 'text_align_right' }),
 		buildCell(`bet`, props.lastBet.bet, { className: 'text_align_right' }),
 		buildCell(`bet_sum`, props.lastBet.bet_sum, { className: 'text_align_right' }),
-		buildCell(`actual_result`, <ResultSelect className={`${willClose ? 'color_gain' : 'color_loss'}`} hasEmptyOption onInput={() => dispatch(setResult(actualResultField.value))} setRef={(ref) => actualResultField = ref} />, { className: 'text_align_center' }),
+
+		buildCell(
+			`actual_result`,
+			<ResultSelect
+				className={`text_align_center ${color}`}
+				expectedResult={props.lastBet.expected_result}
+				hasEmptyOption
+				isRecovery={isRecovery}
+				onInput={() => dispatch(setResult(actualResultField.value))}
+				setRef={(ref) => actualResultField = ref}
+			/>,
+			{ className: 'text_align_center' }
+		),
+
 		buildCell(`prize`, expectedPrize.toFixed(2), { className: 'text_align_right' }),
 		buildCell(`balance`, balance.toFixed(2), { className: 'text_align_right' }),
 		buildCell(`bet_total`, props.lastBet.bet_total, { className: 'text_align_right' }),

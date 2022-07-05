@@ -22,8 +22,14 @@ option.color_gain {
   color: #00ae00;
 }
 
-.color_loss {
+.color_loss,
+option.color_loss {
   color: #ff5e5e;
+}
+
+.color_recovery,
+option.color_recovery {
+  color: #8888ff;
 }
 
 .input_number {

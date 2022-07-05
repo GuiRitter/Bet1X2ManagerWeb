@@ -78,7 +78,17 @@ function BetNew(props) {
 		buildCell(`date_time`, <input onInput={() => dispatch(setDateTime(dateTimeField.value))} ref={ref => { if (ref) { dateTimeField = ref; } }} />),
 		buildCell(`home`, <input onInput={() => dispatch(setHome(homeField.value))} ref={ref => { if (ref) { homeField = ref; } }} />),
 		buildCell(`away`, <input onInput={() => dispatch(setAway(awayField.value))} ref={ref => { if (ref) { awayField = ref; } }} />),
-		buildCell(`expected_result`, <ResultSelect onInput={() => dispatch(setExpectedResult(expectedResultField.value))} setRef={(ref) => expectedResultField = ref} />, { className: 'text_align_center' }),
+
+		buildCell(
+			`expected_result`,
+			<ResultSelect
+				isDefault={true}
+				onInput={() => dispatch(setExpectedResult(expectedResultField.value))}
+				setRef={(ref) => expectedResultField = ref}
+			/>,
+			{ className: 'text_align_center' }
+		),
+
 		buildCell(`odd`, <input className='text_align_right input_number' onInput={() => dispatch(setOdd(oddField.value))} ref={ref => { if (ref) { oddField = ref; } }} />),
 		buildCell(`bet`, <input className='text_align_right input_number' onInput={() => dispatch(setBet(betField.value))} ref={ref => { if (ref) { betField = ref; } }} />),
 		buildCell(`bet_sum`, betSum.toFixed(2), { className: 'text_align_right' }),
