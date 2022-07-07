@@ -26,7 +26,7 @@ function BetOpen(props) {
 	const actualResult = useSelector(state => ((state || {}).reducer || {}).actualResult);
 
 	const willClose = props.lastBet.expected_result === actualResult;
-	const expectedPrize = decimal(props.lastBet.odd).times(decimal(props.lastBet.bet));
+	const expectedPrize = decimal(props.lastBet.prize);
 	const prize = willClose ? expectedPrize : 0;
 	const prizeTotal = decimal(props.lastBet.prize_total).plus(decimal(prize));
 	const balanceTotal = prizeTotal.minus(decimal(props.lastBet.bet_total));

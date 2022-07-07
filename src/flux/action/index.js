@@ -4,6 +4,7 @@ import * as axios from './axios';
 import { API_URL } from '../../constant/system';
 
 import { getUrlWithSearchParams } from '../../util/http';
+import { decimal } from '../../util/math';
 
 export const closeBet = () => (dispatch, getState) => {
 	dispatch(axios.post(
@@ -45,6 +46,13 @@ export const getProject = () => dispatch => {
 };
 
 export const placeBet = () => (dispatch, getState) => {
+	let prize = window.prompt(
+		"Confirm whether the prize paid by the bookmaker matches the computed prize:",
+		decimal(getState().reducer.odd).times(decimal(getState().reducer.bet)).toFixed(2)
+	);
+	if ((!prize) || decimal(prize).isNaN()) {
+		return;
+	}
 	dispatch(axios.post(
 		`${API_URL}/bet/place`,
 		{
@@ -54,7 +62,8 @@ export const placeBet = () => (dispatch, getState) => {
 			away: getState().reducer.away,
 			expectedResult: getState().reducer.expectedResult,
 			odd: getState().reducer.odd,
-			bet: getState().reducer.bet
+			bet: getState().reducer.bet,
+			prize
 		},
 		null,
 		value => dispatch(getBet(getState().reducer.projectId, getState().reducer.projectName)),
