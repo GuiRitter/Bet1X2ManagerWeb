@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { isGain } from '../util/bet';
 import { buildCell, buildRow } from '../util/html';
 import { decimal } from '../util/math';
 import { filledOrZero } from '../util/system';
@@ -30,7 +31,7 @@ function componentDidMount(props, dispatch, dateTime, home, away, expectedResult
 	if (awayField && (awayField.value !== away)) {
 		awayField.value = away
 	}
-	if (expectedResultField && expectedResult && (expectedResultField.value !== expectedResult)) {
+	if (expectedResultField && expectedResult && (!isGain(expectedResultField.value, expectedResult))) {
 		expectedResultField.value = expectedResult
 	}
 	if (betField && filledOrZero(bet) && (!(decimal(betField.value || 0).equals(decimal(bet))))) {
@@ -52,8 +53,7 @@ function BetNew(props) {
 	const expectedResult = useSelector(state => ((state || {}).reducer || {}).expectedResult);
 	const bet = useSelector(state => ((state || {}).reducer || {}).bet) || 0;
 	const odd = useSelector(state => ((state || {}).reducer || {}).odd) || 0;
-
-	const isClosed = props.lastBet.expected_result === props.lastBet.actual_result;
+	const isClosed = isGain(props.lastBet.expected_result, props.lastBet.actual_result);
 	const lastBetSum = isClosed ? 0 : ((props || {}).lastBet || {}).bet_sum || 0;
 	const betSum = decimal(bet).plus(decimal(lastBetSum));
 	const expectedPrize = decimal(odd).times(decimal(bet));

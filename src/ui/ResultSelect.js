@@ -1,8 +1,10 @@
+import { isGain } from '../util/bet';
+
 function getColor(optionResult, expectedResult, isRecovery, isDefault) {
-	if (isDefault) {
+	if (isDefault || optionResult.includes('R')) {
 		return '';
 	}
-	if (optionResult !== expectedResult) {
+	if (!isGain(optionResult, expectedResult)) {
 		return 'color_loss';
 	}
 	if (isRecovery) {
@@ -13,7 +15,13 @@ function getColor(optionResult, expectedResult, isRecovery, isDefault) {
 
 function ResultSelect(props) {
 
-	const optionList = ['', '1', 'X', '2'].map(optionValue => <option
+	let optionList = ['', '1', 'X', '2'];
+
+	if (props.hasReturn) {
+		optionList = optionList.flatMap(x => (x && (!isGain(props.expectedResult, x))) ? [x, `${x}R`] : x);
+	}
+
+	optionList = optionList.map(optionValue => <option
 		key={optionValue}
 		className={getColor(optionValue, props.expectedResult, props.isRecovery, props.isDefault)}
 	>{optionValue}</option>);

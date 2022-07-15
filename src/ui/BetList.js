@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getBet, getProject } from '../flux/action/index';
 
-import { mostRecentComparator } from '../util/bet';
+import { isNotReturned, mostRecentComparator } from '../util/bet';
 import { buildCell, buildRow, buildTable } from '../util/html';
 
 import BetClosed from './BetClosed';
@@ -20,10 +20,11 @@ function BetList(props) {
 
 	const projectId = useSelector(state => ((state || {}).reducer || {}).projectId);
 	const projectName = useSelector(state => ((state || {}).reducer || {}).projectName);
-	const betList = (useSelector(state => (((state || {}).reducer || {}).data)) || []).sort(mostRecentComparator) || [];
-	const lastBet = betList[0] || {};
-	const penultimateBet = betList[1] || {};
-	const showNewBet = (betList.length === 0) || ((lastBet || {}).actual_result);
+	const betList = (useSelector(state => (((state || {}).reducer || {}).data)) || []).sort(mostRecentComparator);
+	const notReturnedBetList = betList.filter(bet => isNotReturned(bet));
+	const lastBet = notReturnedBetList[0] || {};
+	const penultimateBet = notReturnedBetList[1] || {};
+	const showNewBet = (notReturnedBetList.length === 0) || ((lastBet || {}).actual_result);
 
 	log('BetList', { projectId, projectName, betList, lastBet, showNewBet });
 
@@ -34,7 +35,7 @@ function BetList(props) {
 		betActionList.push(<BetOpen
 			key={-1}
 			index={-1}
-			lastBet={lastBet}
+			openBet={lastBet}
 			lastExpectedResult={penultimateBet.expected_result}
 			lastActualResult={penultimateBet.actual_result}
 		/>);
@@ -62,9 +63,10 @@ function BetList(props) {
 		].concat(betActionList).concat(betList.filter(bet => bet.actual_result).map((bet, index, array) => {
 			let lastExpectedResult = null;
 			let lastActualResult = null;
-			if (array[index + 1]) {
-				lastExpectedResult = array[index + 1].expected_result;
-				lastActualResult = array[index + 1].actual_result;
+			let previousBet = array.slice(index + 1).filter(bet => isNotReturned(bet))[0];
+			if (previousBet) {
+				lastExpectedResult = previousBet.expected_result;
+				lastActualResult = previousBet.actual_result;
 			}
 			return <BetClosed
 				key={index}

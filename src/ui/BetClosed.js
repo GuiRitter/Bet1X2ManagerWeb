@@ -1,16 +1,21 @@
+import * as bet from '../util/bet';
+
 import { buildCell, buildRow } from '../util/html';
 
 import { decimal } from '../util/math';
 
 function BetClosed(props) {
 
+	const isReturn = (props.bet.actual_result || '').includes('R');
+	const isRecovery = props.lastExpectedResult && props.lastActualResult && (!bet.isGain(props.lastExpectedResult, props.lastActualResult));
 	const balanceTotal = decimal(props.bet.prize_total).minus(decimal(props.bet.bet_total));
 	const balance = decimal(props.bet.prize).minus(decimal(props.bet.bet_sum));
-	const isGain = props.bet.expected_result === props.bet.actual_result;
+	const isGain = bet.isGain(props.bet.expected_result, props.bet.actual_result);
 
 	const color = 
+		isReturn ? '' :
 		(!isGain) ? 'color_loss' :
-		(props.lastExpectedResult && props.lastActualResult && (props.lastExpectedResult !== props.lastActualResult)) ? 'color_recovery' :
+		isRecovery ? 'color_recovery' :
 		'color_gain';
 
 	return buildRow(
