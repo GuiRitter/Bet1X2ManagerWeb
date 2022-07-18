@@ -42,10 +42,23 @@ function componentDidMount(props, dispatch, dateTime, home, away, expectedResult
 	}
 }
 
+function componentDidUpdate(props, prevProps, dispatch, dateTime, home, away, expectedResult, bet, odd) {
+	componentDidMount(props, dispatch, dateTime, home, away, expectedResult, bet, odd)
+}
+
+function usePrevious(value) {
+	const ref = useRef();
+	useEffect(() => {
+		ref.current = value;
+	});
+	return ref.current;
+}
+
 function BetNew(props) {
 
 	const didMountRef = useRef(false);
 	const dispatch = useDispatch();
+	const prevProps = usePrevious(props);
 
 	const dateTime = useSelector(state => ((state || {}).reducer || {}).dateTime);
 	const home = useSelector(state => ((state || {}).reducer || {}).home);
@@ -66,7 +79,7 @@ function BetNew(props) {
 
 	useEffect(() => {
 		if (didMountRef.current) {
-			// componentDidUpdate(props, prevProps);
+			componentDidUpdate(props, prevProps, dispatch, dateTime, home, away, expectedResult, bet, odd);
 		} else {
 			didMountRef.current = true;
 			componentDidMount(props, dispatch, dateTime, home, away, expectedResult, bet, odd);
@@ -76,7 +89,7 @@ function BetNew(props) {
 	return <>{buildRow(
 		`bet_new_data_row`,
 		buildCell(`date_time`, <input onInput={() => dispatch(setDateTime(dateTimeField.value))} ref={ref => { if (ref) { dateTimeField = ref; } }} />),
-		buildCell(`home`, <input onInput={() => dispatch(setHome(homeField.value))} ref={ref => { if (ref) { homeField = ref; } }} />),
+		buildCell(`home`, <input onInput={event => dispatch(setHome(event, homeField.value))} ref={ref => { if (ref) { homeField = ref; } }} />),
 		buildCell(`away`, <input onInput={() => dispatch(setAway(awayField.value))} ref={ref => { if (ref) { awayField = ref; } }} />),
 
 		buildCell(

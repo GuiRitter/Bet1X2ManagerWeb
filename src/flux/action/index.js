@@ -85,33 +85,27 @@ export const setActionData = (dataName, dataValue) => (dispatch, getState) => {
 	});
 };
 
-export const setAway = away => (dispatch, getState) => {
-	dispatch(setActionData('away', away));
-};
+export const setAway = away => (dispatch, getState) => dispatch(setActionData('away', away));
 
-export const setBet = bet => (dispatch, getState) => {
-	dispatch(setActionData('bet', bet));
-};
+export const setBet = bet => (dispatch, getState) => dispatch(setActionData('bet', bet));
 
-export const setDateTime = dateTime => (dispatch, getState) => {
-	dispatch(setActionData('dateTime', dateTime));
-};
+export const setDateTime = dateTime => (dispatch, getState) => dispatch(setActionData('dateTime', dateTime));
 
-export const setExpectedResult = expectedResult => (dispatch, getState) => {
-	dispatch(setActionData('expectedResult', expectedResult));
-};
+export const setExpectedResult = expectedResult => (dispatch, getState) => dispatch(setActionData('expectedResult', expectedResult));
 
-export const setHome = home => (dispatch, getState) => {
+export const setHome = (event, home) => (dispatch, getState) => {
+	if (event && event.nativeEvent && (event.nativeEvent.inputType === 'insertFromPaste') && home.includes(' vs. ')) {
+		const array = home.split(' vs. ');
+		home = array[0];
+		const away = array[1];
+		dispatch(setActionData('away', away));
+	}
 	dispatch(setActionData('home', home));
 };
 
-export const setOdd = odd => (dispatch, getState) => {
-	dispatch(setActionData('odd', odd));
-};
+export const setOdd = odd => (dispatch, getState) => dispatch(setActionData('odd', odd));
 
-export const setResult = actualResult => (dispatch, getState) => {
-	dispatch(setActionData('actualResult', actualResult));
-};
+export const setResult = actualResult => (dispatch, getState) => dispatch(setActionData('actualResult', actualResult));
 
 export const signIn = (login, password) => dispatch => {
 	dispatch(axios.post(
